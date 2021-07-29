@@ -1,0 +1,20 @@
+#command to create security group
+
+aws ec2 create-security-group --group-name my-sg --description "My security group"
+
+#command to set inbound rules
+
+aws ec2 authorize-security-group-ingress --group-id sg-IDGOESHERE --protocol tcp --port 3389 --cidr x.x.x.x
+
+#command to create keypair
+
+aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text > MyKeyPair.pem
+
+#command to find the ami id
+
+aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-hvm-2.0.????????.?-x86_64-gp2" "Name=state,Values=available" --query "reverse(sort_by(Images, &Name))[:1].ImageId" --output text
+ami-0dc2d3e4c0f9ebd18
+
+#command to launch the instance
+
+aws ec2 run-instances --image-id ami-IDGOESHERE --count 1 --instance-type t2.micro --key-name MyKeyPair --security-group-ids sg-IDGOESHERE --user-data file://user_data.sh
